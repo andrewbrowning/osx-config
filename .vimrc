@@ -1,0 +1,19 @@
+set number
+set tabstop=4
+set softtabstop=4
+set expandtab
+set showcmd   
+set showmatch 
+set incsearch
+set hlsearch
+colorscheme breezy 
+set backup
+set backupdir=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
+set backupskip=/tmp/*,/private/tmp/*
+set directory=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
+set writebackup
+set wrap
+set textwidth=70
+set wrapmargin=0
+filetype plugin indent on
+syntax on

@@ -1,0 +1,80 @@
+#!/bin/bash
+
+#Name: Andrew Browning
+#File: mac
+#Date: Friday, February 17th, 2017
+#Notes: Turn your machine into one that ROCKS!
+
+fancy_echo() {
+    local fmt="$1"; shift
+    #shellcheck disable=sc2059
+    printf "\n$fmt\n" "$@"
+}
+
+#install xcode
+xcode=select --install
+
+#install or update gems
+gem_install_or_update(){
+    if gem list "$1" --installed > /dev/null; then
+        gem update "$@"
+    else
+        gem install "$@"
+        rbenv rehash
+    fi
+}
+
+#Install Homebrew - (prob need sudo chown -R $(whoami) /usr/local)
+if ! command -v brew > /dev/null; then
+    fancy_echo "Installing Homebrew ..."
+        curl -FsS \ 
+            'https://raw.githubusercontent.com/Homebrew/install/master/install'
+| ruby
+fi
+
+#If Homebrew-Cask exists then unintsall and reinstall
+if brew list | grep -Fq brew-cask; then
+    fancy_echo "Uninstalling old Homebrew-Cask..."
+    brew uninstall --force brew-cask
+fi
+
+fancy_echo "Updating Homebrew formulae..."
+brew doctor
+brew update
+brew bundle --file=- << EOF
+brew tap "thoughtbot/formulae"
+brew tap "homebrew/services"
+brew tap "caskroom/cask"
+brew install caskroom/cask/brew-cask
+
+#Unix
+brew install "ctags"
+brew install "git"
+brew install "openssl"
+brew install "rcm"
+brew install "wget"
+
+#Development
+brew cask install "java"
+brew install "libyaml"
+brew install "node"
+brew install "rbenv"
+brew install "ruby-build"
+brew install "pear"
+brew cask install "mysqlworkbench"
+brew install "awscli"
+brew cask install "virtualbox"
+brew install "docker"
+brew install "boot2docker"
+brew install "tor"
+brew cask install "google-chrome"
+brew cask install "gimp"
+brew cask install "dropbox"
+brew install "heroku-toolbelt"
+brew install "parity"
+
+#Acquia Dev Desktop
+wget "https://dev.acquia.com/download-thank-you?distro=acquiadrupal"
+
+EOF
+
